@@ -218,8 +218,6 @@ public class MemoryMappedFileStreamAggregator implements StreamAggregator<String
 	public void delete() throws IOException {
 		close();
 		new File(fileName).delete();
-		intKeysBuffer = null;
-		buffer = null;
 	}
 
 	@Override
@@ -227,6 +225,8 @@ public class MemoryMappedFileStreamAggregator implements StreamAggregator<String
 		if (channel != null && channel.isOpen()) {
 			channel.close();
 		}
+		intKeysBuffer = null;
+		buffer = null;
 	}
 
 	private int getCountOffset(int key) {

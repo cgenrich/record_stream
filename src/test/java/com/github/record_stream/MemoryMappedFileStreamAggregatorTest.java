@@ -2,6 +2,8 @@ package com.github.record_stream;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -100,6 +102,16 @@ public class MemoryMappedFileStreamAggregatorTest {
 		tearDown();
 		aggregator = new MemoryMappedFileStreamAggregator(25, 31, "target/monthBackup", "offset", "one", "two", "three");
 		sumAndCountRange(25, 31);
+	}
+
+	@Test
+	public void readExistingFile() throws IOException {
+		aggregator.incr(1);
+		aggregator.sum(1, 10);
+		MemoryMappedFileStreamAggregator next = new MemoryMappedFileStreamAggregator(1, 31, "target/monthBackup", "offset", "one", "two", "three");
+		assertEquals(1, next.getCount(1));
+		assertEquals(10, next.getSum(1), 0);
+		next.close();
 	}
 
 	@Before
